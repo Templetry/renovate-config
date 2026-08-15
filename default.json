@@ -28,6 +28,17 @@
       "groupName": "github actions"
     }
   ],
+  "customManagers": [
+    {
+      "description": "The catalog's shared engine version, pinned in one file: Templetry/.github's setup-templetry action. Every parent installs the CLI through it, so this single line is what keeps the ten of them together — and what drifted when each carried its own curl.",
+      "customType": "regex",
+      "managerFilePatterns": ["actions/setup-templetry/action.yml"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>\\S+)\\s+SHARED_VERSION=\"(?<currentValue>v[^\"]+)\""
+      ],
+      "versioningTemplate": "semver"
+    }
+  ],
   "vulnerabilityAlerts": {
     "schedule": ["at any time"],
     "labels": ["dependencies", "security"]
