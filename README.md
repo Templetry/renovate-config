@@ -39,3 +39,21 @@ Install the [Renovate GitHub App](https://github.com/apps/renovate) on the `Temp
 ## Related
 
 Generated projects get the same idea as an adoptable piece: `templetry add renovate` ([Templetry/pieces](https://github.com/Templetry/pieces)).
+
+## Previewing without waiting for the schedule
+
+The preset runs weekly, so a change to it can sit unproven for days — and the
+custom manager below rewrites a version string that ten repositories install
+through. Renovate can be run against a working copy instead, which reports
+exactly what it would extract and propose, and writes nothing:
+
+```sh
+cd <repo>
+GITHUB_COM_TOKEN=$(gh auth token) npx --yes renovate --platform=local --dry-run=full
+```
+
+Add `LOG_LEVEL=debug` to see the matched files per manager and the `newValue`
+of every proposed update. This is how the `SHARED_VERSION` manager below was
+confirmed to keep the `v` prefix (`v1.8.0` → `v1.10.0`): dropping it would
+break the binary download URL and fail every parent's CI at once, and that was
+not a thing to find out from a merged PR.
